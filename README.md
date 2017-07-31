@@ -554,7 +554,7 @@ To enable single-binary deployments, use [github.com/jteeuwen/go-bindata](https:
 ## Use decorator pattern
 
 ```go
-struct Config {
+type Config struct {
 	port    int
 	timeout time.Duration
 }
