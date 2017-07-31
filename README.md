@@ -62,7 +62,7 @@ if err != nil {
 }
 ```
 
-Wrapping the error with a custom message provides context as it get's propagated up the stack.
+Wrapping errors with a custom message provides context as it gets propagated up the stack. This does not always make sense. If you're unsure if the context of a returned error is at all times sufficient, wrap it.
 [github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
 
 ## Dependency management
@@ -126,7 +126,7 @@ Global variables make testing and readability hard and every method has access t
 **Do:**
 ```go
 func main() {
-	db ;= // ...
+	db := // ...
 	http.HandleFunc("/drop", DropHandler(db))
 	// ...
 }
@@ -166,7 +166,7 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Using `assert` makes your tests more readable and provides consistent error output.
+Using `assert` makes your tests more readable, requires less code and provides consistent error output.
 
 ### Use table driven tests
 
@@ -269,11 +269,15 @@ func (m *myType) testString() string {
 func TestSomething(t *testing.T) {
 	actual := &myType{/* ... */}
 	expected := &myType{/* ... */}
-	assert.Equal(t, actual.testString(), expected.testString())
+	if actual.testString() != expected.testString() {
+		t.Errorf("Expected '%s', got '%s'", expected.testString(), actual.testString())
+	}
+	// or assert.Equal(t, actual.testString(), expected.testString())
 }
 ```
 
 Using `testString()` for comparing structs helps on complex structs with many fields that are not relevant for the equality check.
+This approach only makes sense for very big or tree-like structs.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=30m45s)
 
 ### Avoid testing unexported funcs
@@ -302,8 +306,8 @@ Side effects are only okay in special cases (e.g. parsing flags in a cmd). If yo
 ## Favour pure funcs
 
 > In computer programming, a function may be considered a pure function if both of the following statements about the function hold:
-> 1. The function always evaluates the same result value given the same argument value(s). The function result value cannot depend on any hidden information or state that may change while program execution proceeds or between different executions of the program, nor can it depend on any external input from I/O devices (usually—see below).
-> 2. Evaluation of the result does not cause any semantically observable side effect or output, such as mutation of mutable objects or output to I/O devices (usually—see below).
+> 1. The function always evaluates the same result value given the same argument value(s). The function result value cannot depend on any hidden information or state that may change while program execution proceeds or between different executions of the program, nor can it depend on any external input from I/O devices.
+> 2. Evaluation of the result does not cause any semantically observable side effect or output, such as mutation of mutable objects or output to I/O devices.
 
 – [Wikipedia](https://en.wikipedia.org/wiki/Pure_function)
 
@@ -373,7 +377,7 @@ Favour small interfaces and only expect the interfaces you need in your funcs.
 
 ## Don't under-package
 
-Deleting or merging packages is fare more easier than splitting big ones up.
+Deleting or merging packages is fare more easier than splitting big ones up. When unsure if a package can be split, do it.
 
 ## Handle signals
 
@@ -464,19 +468,19 @@ func run() (n int, err error) {
 
 Named returns are good for documentation, unadorned returns are bad for readability and error-prone.
 
-## Use import comment
+## Use package comment
 
 **Don't:**
 ```go
-import sub
+package sub
 ```
 
 **Do:**
 ```go
-import sub // import "github.com/my-package/pkg/sth/else/sub"
+package sub // import "github.com/my-package/pkg/sth/else/sub"
 ```
 
-Adding the import comment adds context to the package and make importing easy.
+Adding the package comment adds context to the package and makes importing easy.
 
 ## Avoid empty interface
 
