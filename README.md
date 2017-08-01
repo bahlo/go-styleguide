@@ -14,12 +14,12 @@ experience and inspiration/ideas from conference talks.
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
 - [Testing](#testing)
-	- [Use testify](#use-testify)
+	- [Use assert-libraries](#use-assert-libraries)
 	- [Use table-driven tests](#use-table-driven-tests)
 	- [Avoid mocks](#avoid-mocks)
 	- [Avoid DeepEqual](#avoid-deepequal)
 	- [Avoid testing unexported funcs](#avoid-testing-unexported-funcs)
-- [Use gometalinter](#use-gometalinter)
+- [Use linters](#use-linters)
 - [Use gofmt](#use-gofmt)
 - [Avoid side effects](#avoid-side-effects)
 - [Favour pure funcs](#favour-pure-funcs)
@@ -28,13 +28,12 @@ experience and inspiration/ideas from conference talks.
 - [Handle signals](#handle-signals)
 - [Divide imports](#divide-imports)
 - [Avoid unadorned return](#avoid-unadorned-return)
-- [Use import comment](#use-import-comment)
+- [Use package comment](#use-package-comment)
 - [Avoid empty interface](#avoid-empty-interface)
 - [Main first](#main-first)
-- [Use Makefile if necessary](#use-makefile-if-necessary)
 - [Use internal packages](#use-internal-packages)
 - [Avoid helper/util](#avoid-helperutil)
-- [Use go-bindata](#use-go-bindata)
+- [Embed binary data](#embed-binary-data)
 - [Use decorator pattern](#use-decorator-pattern)
 
 ## Add context to errors
@@ -52,7 +51,7 @@ context.
 
 **Do:**
 ```go
-import "github.com/pkg/errors"
+import "github.com/pkg/errors" // for example
 
 // ...
 
@@ -62,20 +61,28 @@ if err != nil {
 }
 ```
 
-Wrapping errors with a custom message provides context as it gets propagated up the stack. This does not always make sense. If you're unsure if the context of a returned error is at all times sufficient, wrap it.
-[github.com/pkg/errors](https://godoc.org/github.com/pkg/errors)
+Wrapping errors with a custom message provides context as it gets propagated up 
+the stack. 
+This does not always make sense. 
+If you're unsure if the context of a returned error is at all times sufficient, 
+wrap it. 
+Make sure the root error is still accessible somehow for type checking.
 
 ## Dependency management
 
 ### Use dep
-Use [dep](https://github.com/golang/dep), since it's production ready and will soon become part of the toolchain.
+Use [dep](https://github.com/golang/dep), since it's production ready and will 
+soon become part of the toolchain.
 – [Sam Boyer at GopherCon 2017](https://youtu.be/5LtMb090AZI?t=27m57s)
 
 ### Use Semantic Versioning
-Since `dep` can handle versions, tag your packages using [Semantic Versioning](http://semver.org).
+Since `dep` can handle versions, tag your packages using 
+[Semantic Versioning](http://semver.org).
 
 ### Avoid gopkg.in
-[gopkg.in](http://labix.org/gopkg.in) tags one version and is not meant to work with `dep`. Prefer direct import and specify version in `Gopkg.toml`.
+While [gopkg.in](http://labix.org/gopkg.in) is a great tool and was really 
+useful, it tags one version and is not meant to work with `dep`. 
+Prefer direct import and specify version in `Gopkg.toml`.
 
 ## Structured logging
 
@@ -88,7 +95,7 @@ http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 
 **Do:**
 ```go
-import "github.com/uber-go/zap"
+import "github.com/uber-go/zap" // for example
 
 // ...
 
@@ -102,7 +109,8 @@ http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 // {"level":"info","ts":1501326297.511464,"caller":"Desktop/structured.go:17","msg":"Server started","port":80,"env":"production"}
 ```
 
-This is a harmless example, but using structured logging makes debugging and log parsing easier.
+This is a harmless example, but using structured logging makes debugging and log 
+parsing easier.
 
 ## Avoid global variables
 
@@ -121,7 +129,8 @@ func DropHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-Global variables make testing and readability hard and every method has access to them (even those, that don't need it).
+Global variables make testing and readability hard and every method has access 
+to them (even those, that don't need it).
 
 **Do:**
 ```go
@@ -138,11 +147,12 @@ func DropHandler(db *sql.DB) http.HandleFunc {
 }
 ```
 
-Use higher-order functions instead of global variables to inject dependencies accordingly.
+Use higher-order functions instead of global variables to inject dependencies 
+accordingly.
 
 ## Testing
 
-### Use testify
+### Use assert-libraries
 
 **Don't:**
 ```go
@@ -157,7 +167,7 @@ func TestAdd(t *testing.T) {
 
 **Do:**
 ```go
-import "github.com/stretchr/testify/assert"
+import "github.com/stretchr/testify/assert" // for example
 
 func TestAdd(t *testing.T) {
 	actual := 2 + 2
@@ -166,7 +176,8 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Using `assert` makes your tests more readable, requires less code and provides consistent error output.
+Using assert libraries makes your tests more readable, requires less code and 
+provides consistent error output.
 
 ### Use table driven tests
 
@@ -180,7 +191,8 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-The above approach looks simpler, but it's much harder to find a failing case, especially when having hundreds of cases.
+The above approach looks simpler, but it's much harder to find a failing case, 
+especially when having hundreds of cases.
 
 **Do:**
 ```go
@@ -284,9 +296,10 @@ This approach only makes sense for very big or tree-like structs.
 
 Only test unexported funcs if you can't access a path via exported funcs. Since they are unexported, they are prone to change.
 
-## Use gometalinter
+## Use linters
 
-Use [gometalinter](https://github.com/alecthomas/gometalinter) to lint your projects before committing.
+Use linters (e.g. [gometalinter](https://github.com/alecthomas/gometalinter)) to 
+lint your projects before committing.
 
 ## Use gofmt
 
@@ -426,7 +439,7 @@ Handling signals allows us to gracefully stop our server, close open files and c
 ```go
 import (
 	"encoding/json"
-	"go.uber.org/zap"
+	"github.com/some/external/pkg"
 	"fmt"
 	"github.com/this-project/pkg/some-lib"
 	"os"
@@ -440,7 +453,7 @@ import (
 	"fmt"
 	"os"
 
-	"go.uber.org/zap"
+	"github.com/some/external/pkg"
 
 	"github.com/this-project/pkg/some-lib"
 )
@@ -539,10 +552,6 @@ func someOtherHelper() string {
 
 Putting `main()` first makes reading the file a lot more easier. Only the `init()` function should be above it.
 
-## Use Makefile if necessary
-
-If you always want or need specific flags or need to generate protobuffers, create a Makefile.
-
 ## Use internal packages
 
 If you're creating a cmd, consider moving libraries to `internal/` to prevent import of unstable, changing packages.
@@ -551,9 +560,11 @@ If you're creating a cmd, consider moving libraries to `internal/` to prevent im
 
 Use clear names and try to avoid creating a `helper.go`, `utils.go` or even package.
 
-## Use go-bindata
+## Embed binary data
 
-To enable single-binary deployments, use [github.com/jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata) for adding templates and other static assets to your binary.
+To enable single-binary deployments, use tools to add templates and other static 
+assets to your binary 
+(e.g. [github.com/jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata)).
 
 ## Use decorator pattern
 
