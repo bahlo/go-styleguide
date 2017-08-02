@@ -390,7 +390,7 @@ Favour small interfaces and only expect the interfaces you need in your funcs.
 
 ## Don't under-package
 
-Deleting or merging packages is fare more easier than splitting big ones up. When unsure if a package can be split, do it.
+Deleting or merging packages is far more easier than splitting big ones up. When unsure if a package can be split, do it.
 
 ## Handle signals
 
