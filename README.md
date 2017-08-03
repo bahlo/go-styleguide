@@ -408,7 +408,7 @@ func main() {
 ```go
 func main() {
 	logger := // ...
-	sc := make(chan os.Signal)
+	sc := make(chan os.Signal, 1)
 	done := make(chan bool)
 
 	go func() {
@@ -417,13 +417,13 @@ func main() {
 			case s := <-sc:
 				logger.Info("Received signal, stopping application",
 					zap.String("signal", s.String()))
-				break
+				done <- true
+				return
 			default:
 				time.Sleep(1 * time.Second)
 				ioutil.WriteFile("foo", []byte("bar"), 0644)
 			}
 		}
-		done <- true
 	}()
 
 	signal.Notify(sc, os.Interrupt, os.Kill)
