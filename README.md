@@ -1,7 +1,7 @@
 # Go Styleguide
 
 This serves as a supplement to
-[Effective Go](https://golang.org/doc/effective_go.html), based on years of 
+[Effective Go](https://golang.org/doc/effective_go.html), based on years of
 experience and inspiration/ideas from conference talks.
 
 ## Table of contents
@@ -61,27 +61,27 @@ if err != nil {
 }
 ```
 
-Wrapping errors with a custom message provides context as it gets propagated up 
-the stack. 
-This does not always make sense. 
-If you're unsure if the context of a returned error is at all times sufficient, 
-wrap it. 
+Wrapping errors with a custom message provides context as it gets propagated up
+the stack.
+This does not always make sense.
+If you're unsure if the context of a returned error is at all times sufficient,
+wrap it.
 Make sure the root error is still accessible somehow for type checking.
 
 ## Dependency management
 
 ### Use dep
-Use [dep](https://github.com/golang/dep), since it's production ready and will 
+Use [dep](https://github.com/golang/dep), since it's production ready and will
 soon become part of the toolchain.
 – [Sam Boyer at GopherCon 2017](https://youtu.be/5LtMb090AZI?t=27m57s)
 
 ### Use Semantic Versioning
-Since `dep` can handle versions, tag your packages using 
+Since `dep` can handle versions, tag your packages using
 [Semantic Versioning](http://semver.org).
 
 ### Avoid gopkg.in
-While [gopkg.in](http://labix.org/gopkg.in) is a great tool and was really 
-useful, it tags one version and is not meant to work with `dep`. 
+While [gopkg.in](http://labix.org/gopkg.in) is a great tool and was really
+useful, it tags one version and is not meant to work with `dep`.
 Prefer direct import and specify version in `Gopkg.toml`.
 
 ## Structured logging
@@ -109,7 +109,7 @@ http.ListenAndServe(fmt.Sprintf(":%d", port), nil)
 // {"level":"info","ts":1501326297.511464,"caller":"Desktop/structured.go:17","msg":"Server started","port":80,"env":"production"}
 ```
 
-This is a harmless example, but using structured logging makes debugging and log 
+This is a harmless example, but using structured logging makes debugging and log
 parsing easier.
 
 ## Avoid global variables
@@ -129,7 +129,7 @@ func DropHandler(w http.ResponseWriter, r *http.Request) {
 }
 ```
 
-Global variables make testing and readability hard and every method has access 
+Global variables make testing and readability hard and every method has access
 to them (even those, that don't need it).
 
 **Do:**
@@ -147,7 +147,7 @@ func DropHandler(db *sql.DB) http.HandleFunc {
 }
 ```
 
-Use higher-order functions instead of global variables to inject dependencies 
+Use higher-order functions instead of global variables to inject dependencies
 accordingly.
 
 ## Testing
@@ -176,7 +176,7 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Using assert libraries makes your tests more readable, requires less code and 
+Using assert libraries makes your tests more readable, requires less code and
 provides consistent error output.
 
 ### Use table driven tests
@@ -191,7 +191,7 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-The above approach looks simpler, but it's much harder to find a failing case, 
+The above approach looks simpler, but it's much harder to find a failing case,
 especially when having hundreds of cases.
 
 **Do:**
@@ -298,7 +298,7 @@ Only test unexported funcs if you can't access a path via exported funcs. Since 
 
 ## Use linters
 
-Use linters (e.g. [gometalinter](https://github.com/alecthomas/gometalinter)) to 
+Use linters (e.g. [gometalinter](https://github.com/alecthomas/gometalinter)) to
 lint your projects before committing.
 
 ## Use gofmt
@@ -564,6 +564,8 @@ Use clear names and try to avoid creating a `helper.go`, `utils.go` or even pack
 
 To enable single-binary deployments, use tools to add templates and other static 
 assets to your binary 
+To enable single-binary deployments, use tools to add templates and other static
+assets to your binary
 (e.g. [github.com/jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata)).
 
 ## Use decorator pattern
