@@ -28,7 +28,7 @@ experience and inspiration/ideas from conference talks.
 - [Handle signals](#handle-signals)
 - [Divide imports](#divide-imports)
 - [Avoid unadorned return](#avoid-unadorned-return)
-- [Use package comment](#use-package-comment)
+- [Use canonical import path](#use-canonical-import-path)
 - [Avoid empty interface](#avoid-empty-interface)
 - [Main first](#main-first)
 - [Use internal packages](#use-internal-packages)
@@ -490,7 +490,7 @@ func run() (n int, err error) {
 Named returns are good for documentation, unadorned returns are bad for
 readability and error-prone.
 
-## Use package comment
+## Use canonical import path
 
 **Don't:**
 ```go
@@ -502,7 +502,8 @@ package sub
 package sub // import "github.com/my-package/pkg/sth/else/sub"
 ```
 
-Adding the package comment adds context to the package and makes importing easy.
+Adding the canonical import path adds context to the package and makes
+importing easy.
 
 ## Avoid empty interface
 
