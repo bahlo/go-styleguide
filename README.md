@@ -582,6 +582,15 @@ assets to your binary
 ## Use functional options
 
 ```go
+
+func main() {
+	// ...
+	startServer(
+		WithPort(8080),
+		WithTimeout(1 * time.Second),
+	)
+}
+
 type Config struct {
 	port    int
 	timeout time.Duration
@@ -610,11 +619,5 @@ func startServer(opts ...ServerOpt) {
 	// ...
 }
 
-func main() {
-	// ...
-	startServer(
-		WithPort(8080),
-		WithTimeout(1 * time.Second),
-	)
-}
+
 ```
