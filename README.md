@@ -34,7 +34,7 @@ experience and inspiration/ideas from conference talks.
 - [Use internal packages](#use-internal-packages)
 - [Avoid helper/util](#avoid-helperutil)
 - [Embed binary data](#embed-binary-data)
-- [Use decorator pattern](#use-decorator-pattern)
+- [Use functional options](#use-functional-options)
 
 ## Add context to errors
 
@@ -562,13 +562,11 @@ Use clear names and try to avoid creating a `helper.go`, `utils.go` or even pack
 
 ## Embed binary data
 
-To enable single-binary deployments, use tools to add templates and other static 
-assets to your binary 
 To enable single-binary deployments, use tools to add templates and other static
 assets to your binary
 (e.g. [github.com/jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata)).
 
-## Use decorator pattern
+## Use functional options
 
 ```go
 type Config struct {
