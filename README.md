@@ -214,7 +214,8 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Using table driven tests in combination with subtests gives you direct insight about which case is failing and which cases are tested.
+Using table driven tests in combination with subtests gives you direct insight
+about which case is failing and which cases are tested.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=7m34s)
 
 ### Avoid mocks
@@ -247,7 +248,8 @@ func TestRun(t *testing.T) {
 }
 ```
 
-Only use mocks if not otherwise possible, favor real implementations. – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=26m51s)
+Only use mocks if not otherwise possible, favor real implementations.
+– [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=26m51s)
 
 ### Avoid DeepEqual
 
@@ -288,13 +290,15 @@ func TestSomething(t *testing.T) {
 }
 ```
 
-Using `testString()` for comparing structs helps on complex structs with many fields that are not relevant for the equality check.
+Using `testString()` for comparing structs helps on complex structs with many
+fields that are not relevant for the equality check.
 This approach only makes sense for very big or tree-like structs.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=30m45s)
 
 ### Avoid testing unexported funcs
 
-Only test unexported funcs if you can't access a path via exported funcs. Since they are unexported, they are prone to change.
+Only test unexported funcs if you can't access a path via exported funcs.
+Since they are unexported, they are prone to change.
 
 ## Use linters
 
@@ -314,7 +318,8 @@ func init() {
 }
 ```
 
-Side effects are only okay in special cases (e.g. parsing flags in a cmd). If you find no other way, rethink and refactor.
+Side effects are only okay in special cases (e.g. parsing flags in a cmd).
+If you find no other way, rethink and refactor.
 
 ## Favour pure funcs
 
@@ -346,7 +351,8 @@ func Marshal(some *Thing) ([]bytes, error) {
 // ...
 ```
 
-This is obviously not possible at all times, but trying to make every possible func pure makes code more understandable and improves debugging.
+This is obviously not possible at all times, but trying to make every possible
+func pure makes code more understandable and improves debugging.
 
 ## Don't over-interface
 
@@ -390,7 +396,8 @@ Favour small interfaces and only expect the interfaces you need in your funcs.
 
 ## Don't under-package
 
-Deleting or merging packages is far more easier than splitting big ones up. When unsure if a package can be split, do it.
+Deleting or merging packages is far more easier than splitting big ones up.
+When unsure if a package can be split, do it.
 
 ## Handle signals
 
@@ -431,7 +438,8 @@ func main() {
 }
 ```
 
-Handling signals allows us to gracefully stop our server, close open files and connections and therefore prevent file corruption among other things.
+Handling signals allows us to gracefully stop our server, close open files and
+connections and therefore prevent file corruption among other things.
 
 ## Divide imports
 
@@ -479,7 +487,8 @@ func run() (n int, err error) {
 }
 ```
 
-Named returns are good for documentation, unadorned returns are bad for readability and error-prone.
+Named returns are good for documentation, unadorned returns are bad for
+readability and error-prone.
 
 ## Use package comment
 
@@ -550,15 +559,18 @@ func someOtherHelper() string {
 }
 ```
 
-Putting `main()` first makes reading the file a lot more easier. Only the `init()` function should be above it.
+Putting `main()` first makes reading the file a lot more easier. Only the
+`init()` function should be above it.
 
 ## Use internal packages
 
-If you're creating a cmd, consider moving libraries to `internal/` to prevent import of unstable, changing packages.
+If you're creating a cmd, consider moving libraries to `internal/` to prevent
+import of unstable, changing packages.
 
 ## Avoid helper/util
 
-Use clear names and try to avoid creating a `helper.go`, `utils.go` or even package.
+Use clear names and try to avoid creating a `helper.go`, `utils.go` or even
+package.
 
 ## Embed binary data
 
