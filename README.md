@@ -10,20 +10,23 @@ experience and inspiration/ideas from conference talks.
 - [Dependency managemenet](#dependency-management)
 	- [Use dep](#use-dep)
 	- [Use Semantic Versioning](#use-semantic-versioning)
+	- [Avoid unnessary version lockdown](#avoid-unnessary-version-lockdown)
 	- [Avoid gopkg.in](#avoid-gopkgin)
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
 - [Testing](#testing)
 	- [Use assert-libraries](#use-assert-libraries)
+	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
 	- [Use table-driven tests](#use-table-driven-tests)
 	- [Avoid mocks](#avoid-mocks)
 	- [Avoid DeepEqual](#avoid-deepequal)
 	- [Avoid testing unexported funcs](#avoid-testing-unexported-funcs)
+	- [Add examples to your test files to demonstrate usage](#add-examples-to-your-test-files-to-demonstrate-usage)
 - [Use linters](#use-linters)
-- [Use gofmt](#use-gofmt)
+- [Use goimports](#use-goimports)
 - [Use meaningful variable names](#use-meaningful-variable-names)
 - [Avoid side effects](#avoid-side-effects)
-- [Favour pure funcs](#favour-pure-funcs)
+- [Favour pure functions](#favour-pure-functions)
 - [Don't over-interface](#dont-over-interface)
 - [Don't under-package](#dont-under-package)
 - [Handle signals](#handle-signals)
@@ -81,7 +84,9 @@ Since `dep` can handle versions, tag your packages using
 [Semantic Versioning](http://semver.org).  
 The git tag for your go package should have the format `v<major>.<minor>.<patch>`, e.g., `v1.0.1`.
 
-### Avoid unnessary version lockdown in `Gopkg.toml`
+### Avoid unnessary version lockdown
+If possible only lock the major version in the `Gopkg.toml` file.  
+
 **Don't:**
 ```
 [[constraint]]
@@ -364,12 +369,19 @@ func ExamleSomeInterface_SomeMethod(){
 
 ## Use linters
 
-Use [gometalinter](https://github.com/alecthomas/gometalinter) to
-lint your projects before committing.
+Use all the linters included in [gometalinter](https://github.com/alecthomas/gometalinter) to lint your projects before committing.
+```bash
+# Installation
+go get -u gopkg.in/alecthomas/gometalinter.v2
+gometalinter.v2 --install
 
-## Use gofmt
+# Usage in the project workspace
+gometalinter.v2 --vendor ./...
+```
 
-Only commit gofmt'd files, use `-s` to simplify code.
+## Use goimports
+
+Only commit gofmt'd files. Use `goimports` for this to format/update the import statements as well.
 
 ## Use meaningful variable names
 Avoid single-letter variable names. They may seem more readable to you at the moment of writing but they make the code hard to understand for your colleagues and your future self.  
@@ -571,10 +583,10 @@ import (
 ```
 
 Divide imports into four groups sorted from internal to external for readability:
-1. standard library
-2. project internal packages
-3. company internal packages
-4. external packages
+1. Standard library
+2. Project internal packages
+3. Company internal packages
+4. External packages
 
 ## Avoid unadorned return
 
