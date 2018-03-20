@@ -7,6 +7,7 @@ experience and inspiration/ideas from conference talks.
 ## Table of contents
 
 - [Add context to errors](#add-context-to-errors)
+- [Consistent error and log messages](#consistent-error-and-log-messages)
 - [Dependency managemenet](#dependency-management)
 	- [Use dep](#use-dep)
 	- [Use Semantic Versioning](#use-semantic-versioning)
@@ -39,6 +40,10 @@ experience and inspiration/ideas from conference talks.
 - [Avoid helper/util](#avoid-helperutil)
 - [Embed binary data](#embed-binary-data)
 - [Use functional options](#use-functional-options)
+- [Structs](#structs)
+	- [Use named structs](#use-named-structs)
+	- [Avoid new keyword](#avoid-new-keyword)
+- [Consistent header naming](#consistent-header-naming)
 
 ## Add context to errors
 
@@ -71,6 +76,22 @@ This does not always make sense.
 If you're unsure if the context of a returned error is at all times sufficient,
 wrap it.
 Make sure the root error is still accessible somehow for type checking.
+
+## Consistent error and log messages
+Error messages should start with a lowercase letter and should not end with a `.`. See [Wiki page on Errors](https://github.com/golang/go/wiki/Errors) for reference. For consistency the same logic should be applied for log messages.
+
+**Don't:**
+```go
+logger.Print("Something went wrong.")
+ReadFailError := errors.New("Could not read file")
+```
+
+**Do:**
+```go
+logger.Print("something went wrong")
+ErrReadFailed := errors.New("could not read file")
+```
+
 
 ## Dependency management
 
@@ -181,6 +202,51 @@ func DropHandler(db *sql.DB) http.HandleFunc {
 	}
 }
 ```
+
+If you really need global variables or constants, e.g., for defining errors or string constants, put them at the top of your file.
+
+**Don't:**
+```go
+import "xyz"
+
+func someFunc() {
+	//...
+}
+
+route = "/some-route"
+
+func someOtherFunc() {
+	// usage of route
+}
+
+var NotFoundErr = errors.New("not found")
+
+func yetAnotherFunc() {
+	// usage of NotFoundErr
+}
+```
+
+**Do:**
+```go
+import "xyz"
+
+route = "/some-route"
+
+var NotFoundErr = errors.New("not found")
+
+func someFunc() {
+	//...
+}
+
+func someOtherFunc() {
+	// usage of route
+}
+
+func yetAnotherFunc() {
+	// usage of NotFoundErr
+}
+```
+
 
 ## Testing
 
@@ -739,4 +805,56 @@ func startServer(opts ...ServerOpt) {
 }
 
 
+```
+
+## Structs
+### Use named structs
+If a struct has more than one field include field names when instantiating it.
+
+**Don't:**
+```go
+params := request.Params{
+	"http://example.com",
+	"POST",
+	map[string]string{"Authentication": "someToken"}
+	someStruct,
+}
+```
+
+**Do:**
+```go
+params := request.Params{
+	URL: "http://example.com",
+	Method: "POST",
+	Headers: map[string]string{"Authentication": "someToken"}
+	Body: someStruct,
+}
+```
+
+### Avoid new keyword
+Using the normal syntax instead of the `new` keyword makes it more clear what is happening: a new instance of the struct is created `MyStruct{}` and we get the pointer for it with `&`.
+
+**Don't:**
+```go
+s := new(MyStruct)
+```
+
+**Do:**
+```go
+s := &MyStruct{}
+```
+
+## Consistent header naming
+**Don't:**
+```go
+r.Header.Get("authorization")
+w.Header.Set("Content-type")
+w.Header.Set("content-type")
+w.Header.Set("content-Type")
+```
+
+**Do:**
+```go
+r.Header.Get("Authorization")
+w.Header.Set("Content-Type")
 ```
