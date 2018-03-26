@@ -16,7 +16,7 @@ experience and inspiration/ideas from conference talks.
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
 - [Testing](#testing)
-	- [Use assert-libraries](#use-assert-libraries)
+	- [Use testify as assert libary](#use-testify-as-assert-libary)
 	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
 	- [Use table-driven tests](#use-table-driven-tests)
 	- [Avoid mocks](#avoid-mocks)
