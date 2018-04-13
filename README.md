@@ -295,6 +295,9 @@ fields that are not relevant for the equality check.
 This approach only makes sense for very big or tree-like structs.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=30m45s)
 
+Google open sourced their http://github.com/google/go-cmp package as a more powerful and safer alternative to reflect.DeepEqual.
+- [Joe Tsai](https://twitter.com/francesc/status/885630175668346880).
+
 ### Avoid testing unexported funcs
 
 Only test unexported funcs if you can't access a path via exported funcs.
