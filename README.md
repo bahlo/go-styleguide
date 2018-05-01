@@ -109,14 +109,14 @@ The git tag for your go package should have the format `v<major>.<minor>.<patch>
 If possible only lock the major version in the `Gopkg.toml` file.  
 
 **Don't:**
-```
+```toml
 [[constraint]]
   name = "github.com/stretchr/testify"
   version = "1.1.4"
 ```
 
 **Do:**
-```
+```toml
 [[constraint]]
   name = "github.com/stretchr/testify"
   version = "^1.1.4"
