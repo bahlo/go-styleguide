@@ -343,7 +343,7 @@ about which case is failing and which cases are tested.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=7m34s)
 
 Running subtests in parallel allows you to have a lot more test cases and still get those awesomely fast go build times.
-- [The Go Blog](https://blog.golang.org/subtests)
+– [The Go Blog](https://blog.golang.org/subtests)
 
 ### Avoid mocks
 
