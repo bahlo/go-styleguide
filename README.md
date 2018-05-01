@@ -331,6 +331,7 @@ func TestAdd(t *testing.T) {
 
 	for _, tc := range cases {
 		t.Run(fmt.Sprintf("%d + %d", tc.A, tc.B), func(t *testing.T) {
+			t.Parallel()
 			assert.Equal(t, t.Expected, tc.A+tc.B)
 		})
 	}
@@ -340,6 +341,9 @@ func TestAdd(t *testing.T) {
 Using table driven tests in combination with subtests gives you direct insight
 about which case is failing and which cases are tested.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=7m34s)
+
+Running subtests in parallel allows you to have a lot more test cases and still get those awesomely fast go build times.
+- [The Go Blog](https://blog.golang.org/subtests)
 
 ### Avoid mocks
 
