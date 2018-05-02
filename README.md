@@ -39,6 +39,7 @@ experience and inspiration/ideas from conference talks.
 - [Use internal packages](#use-internal-packages)
 - [Avoid helper/util](#avoid-helperutil)
 - [Embed binary data](#embed-binary-data)
+- [Use io.WriteString](#use-iowritestring)
 - [Use functional options](#use-functional-options)
 - [Structs](#structs)
 	- [Use named structs](#use-named-structs)
@@ -106,7 +107,7 @@ Since `dep` can handle versions, tag your packages using
 The git tag for your go package should have the format `v<major>.<minor>.<patch>`, e.g., `v1.0.1`.
 
 ### Avoid unnessary version lockdown
-If possible only lock the major version in the `Gopkg.toml` file.  
+If possible only lock the major version in the `Gopkg.toml` file.
 
 **Don't:**
 ```toml
@@ -186,7 +187,7 @@ func (h *Handlers) DropHandler(w http.ResponseWriter, r *http.Request) {
 	h.DB.Exec("DROP DATABASE prod")
 }
 ```
-Use structs to encapsulate the variables and make them available only to those functions that actually need them by making them methods implemented for that struct.  
+Use structs to encapsulate the variables and make them available only to those functions that actually need them by making them methods implemented for that struct.
 
 Alternatively higher-order functions can be used to inject dependencies via closures.
 ```go
@@ -295,7 +296,7 @@ func TestSomeFunction(t *testing.T) {
 	t.Run("success", func(t *testing.T){
 		//...
 	})
-	
+
 	t.Run("wrong input", func(t *testing.T){
 		//...
 	})
@@ -454,7 +455,7 @@ gometalinter.v2 --vendor ./...
 Only commit gofmt'd files. Use `goimports` for this to format/update the import statements as well.
 
 ## Use meaningful variable names
-Avoid single-letter variable names. They may seem more readable to you at the moment of writing but they make the code hard to understand for your colleagues and your future self.  
+Avoid single-letter variable names. They may seem more readable to you at the moment of writing but they make the code hard to understand for your colleagues and your future self.
 
 **Don't:**
 ```go
@@ -767,6 +768,28 @@ package.
 To enable single-binary deployments, use tools to add templates and other static
 assets to your binary
 (e.g. [github.com/jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata)).
+
+## Use `io.WriteString`
+A number of important types that satisfy `io.Writer` also have a `WriteString`
+method, including `*bytes.Buffer`, `*os.File` and `*bufio.Writer`. `WriteString`
+is behavioral contract with implicit assent that passed string will be written
+in efficient way, without a temporary allocation. Therefore using
+`io.WriteString` may improve performance at most, and at least string will be
+written in any way.
+
+**Don't:**
+```go
+var w io.Writer = new(bytes.Buffer)
+str := "some string"
+w.Write([]byte(str))
+```
+
+**Do:**
+```go
+var w io.Writer = new(bytes.Buffer)
+str := "some string"
+io.WriteString(w, str)
+```
 
 ## Use functional options
 
