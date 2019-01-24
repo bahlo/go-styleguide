@@ -8,7 +8,7 @@ experience and inspiration/ideas from conference talks.
 
 - [Add context to errors](#add-context-to-errors)
 - [Consistent error and log messages](#consistent-error-and-log-messages)
-- [Dependency managemenet](#dependency-management)
+- [Dependency management](#dependency-management)
 	- [Use dep](#use-dep)
 	- [Use Semantic Versioning](#use-semantic-versioning)
 	- [Avoid unnessary version lockdown](#avoid-unnessary-version-lockdown)
