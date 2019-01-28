@@ -770,7 +770,7 @@ package.
 
 To enable single-binary deployments, use tools to add templates and other static
 assets to your binary
-(e.g. [github.com/jteeuwen/go-bindata](https://github.com/jteeuwen/go-bindata)).
+(e.g. [github.com/gobuffalo/packr](https://github.com/gobuffalo/packr)).
 
 ## Use `io.WriteString`
 A number of important types that satisfy `io.Writer` also have a `WriteString`
