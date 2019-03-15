@@ -443,15 +443,19 @@ func ExamleSomeInterface_SomeMethod(){
 
 ## Use linters
 
-Use all the linters included in [gometalinter](https://github.com/alecthomas/gometalinter) to lint your projects before committing.
+Use all the linters included in [golangci-lint](https://github.com/golangci/golangci-lint) to lint your projects before committing.
 ```bash
 # Installation
-go get -u gopkg.in/alecthomas/gometalinter.v2
-gometalinter.v2 --install
+go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+# or with go 1.11 and higher - replace vX.X.X with the version you want to use
+GO111MODULE=on go get github.com/golangci/golangci-lint/cmd/golangci-lint@vX.X.X
 
 # Usage in the project workspace
-gometalinter.v2 --vendor ./...
+golangci-lint run
+# the above command is equivalent to
+golangci-lint run ./...
 ```
+For detailed usage and the ci-pipeline installation guide visit [golangci-lint](https://github.com/golangci/golangci-lint)
 
 ## Use goimports
 
