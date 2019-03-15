@@ -9,10 +9,8 @@ experience and inspiration/ideas from conference talks.
 - [Add context to errors](#add-context-to-errors)
 - [Consistent error and log messages](#consistent-error-and-log-messages)
 - [Dependency management](#dependency-management)
-	- [Use dep](#use-dep)
+	- [Use modules](#use-modules)
 	- [Use Semantic Versioning](#use-semantic-versioning)
-	- [Avoid unnessary version lockdown](#avoid-unnessary-version-lockdown)
-	- [Avoid gopkg.in](#avoid-gopkgin)
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
 - [Testing](#testing)
@@ -96,37 +94,14 @@ ErrReadFailed := errors.New("could not read file")
 
 ## Dependency management
 
-### Use dep
-Use [dep](https://github.com/golang/dep), since it's production ready and will
-soon become part of the toolchain.
-– [Sam Boyer at GopherCon 2017](https://youtu.be/5LtMb090AZI?t=27m57s)
+### Use modules
+Use [modules](https://github.com/golang/go/wiki/Modules), since it is the built-in go dependency 
+management tooling and will be widely supported (available with Go 1.11+).
 
 ### Use Semantic Versioning
-Since `dep` can handle versions, tag your packages using
-[Semantic Versioning](http://semver.org).  
+Tag your packages using [Semantic Versioning](http://semver.org), check the [modules wiki](https://github.com/golang/go/wiki/Modules#how-to-prepare-for-a-release) for more information about
+best practices regarding releases.
 The git tag for your go package should have the format `v<major>.<minor>.<patch>`, e.g., `v1.0.1`.
-
-### Avoid unnessary version lockdown
-If possible only lock the major version in the `Gopkg.toml` file.
-
-**Don't:**
-```toml
-[[constraint]]
-  name = "github.com/stretchr/testify"
-  version = "1.1.4"
-```
-
-**Do:**
-```toml
-[[constraint]]
-  name = "github.com/stretchr/testify"
-  version = "^1.1.4"
-```
-
-### Avoid gopkg.in
-While [gopkg.in](http://labix.org/gopkg.in) is a great tool and was really
-useful, it tags one version and is not meant to work with `dep`.
-Prefer direct import and specify version in `Gopkg.toml`.
 
 ## Structured logging
 
