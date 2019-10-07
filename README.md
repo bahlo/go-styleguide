@@ -14,7 +14,7 @@ experience and inspiration/ideas from conference talks.
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
 - [Testing](#testing)
-	- [Use testify as assert libary](#use-testify-as-assert-libary)
+	- [Use an assert libary](#use-an-assert-libary)
 	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
 	- [Use table-driven tests](#use-table-driven-tests)
 	- [Avoid mocks](#avoid-mocks)
@@ -59,13 +59,9 @@ context.
 
 **Do:**
 ```go
-import "github.com/pkg/errors" // for example
-
-// ...
-
 file, err := os.Open("foo.txt")
 if err != nil {
-	return errors.Wrap(err, "open foo.txt failed")
+	return fmt.Errorf("open foo.txt failed: %w", err)
 }
 ```
 
@@ -74,23 +70,6 @@ the stack.
 This does not always make sense.
 If you're unsure if the context of a returned error is at all times sufficient,
 wrap it.
-Make sure the root error is still accessible somehow for type checking.
-
-## Consistent error and log messages
-Error messages should start with a lowercase letter and should not end with a `.`. See [Wiki page on Errors](https://github.com/golang/go/wiki/Errors) for reference. For consistency the same logic should be applied for log messages.
-
-**Don't:**
-```go
-logger.Print("Something went wrong.")
-ReadFailError := errors.New("Could not read file")
-```
-
-**Do:**
-```go
-logger.Print("something went wrong")
-ErrReadFailed := errors.New("could not read file")
-```
-
 
 ## Dependency management
 
@@ -226,7 +205,7 @@ func yetAnotherFunc() {
 
 ## Testing
 
-### Use testify as assert libary
+### Use an assert libary
 
 **Don't:**
 ```go
@@ -624,10 +603,10 @@ import (
 	"fmt"
 	"os"
 
-	"git.fastbill.com/this-project/pkg/some-lib"
+	"github.com/bahlo/this-project/pkg/some-lib"
 
-	"git.fastbill.com/another-project/pkg/some-lib"
-	"git.fastbill.com/yet-another-project/pkg/some-lib"
+	"github.com/bahlo/another-project/pkg/some-lib"
+	"github.com/bahlo/yet-another-project/pkg/some-lib"
 
 	"github.com/some/external/pkg"
 	"github.com/some-other/external/pkg"
@@ -821,21 +800,17 @@ If a struct has more than one field include field names when instantiating it.
 
 **Don't:**
 ```go
-params := request.Params{
-	"http://example.com",
-	"POST",
-	map[string]string{"Authentication": "someToken"}
-	someStruct,
+params := myStruct{
+	1, 
+	true,
 }
 ```
 
 **Do:**
 ```go
-params := request.Params{
-	URL: "http://example.com",
-	Method: "POST",
-	Headers: map[string]string{"Authentication": "someToken"}
-	Body: someStruct,
+params := myStruct{
+	Foo: 1,
+	Bar: true,
 }
 ```
 
