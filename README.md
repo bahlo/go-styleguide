@@ -168,7 +168,7 @@ func someFunc() {
 	//...
 }
 
-route = "/some-route"
+const route = "/some-route"
 
 func someOtherFunc() {
 	// usage of route
@@ -185,7 +185,7 @@ func yetAnotherFunc() {
 ```go
 import "xyz"
 
-route = "/some-route"
+const route = "/some-route"
 
 var NotFoundErr = errors.New("not found")
 
