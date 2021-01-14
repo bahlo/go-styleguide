@@ -13,6 +13,7 @@ experience and inspiration/ideas from conference talks.
 	- [Use Semantic Versioning](#use-semantic-versioning)
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
+- [Keep the happy path left](#keep-the-happy-path-left)
 - [Testing](#testing)
 	- [Use an assert libary](#use-an-assert-libary)
 	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
@@ -202,6 +203,28 @@ func yetAnotherFunc() {
 }
 ```
 
+## Keep the happy path left
+
+**Don't:**
+```go
+if item, ok := someMap[someKey]; ok {
+	return item
+}
+return ErrKeyNotFound
+```
+
+**Do:**
+```go
+item, ok := someMap[someKey]
+if !ok {
+	return ErrKeyNotFound
+}
+return item
+```
+
+This helps to keep your code clear and readable. Not doing it accumulates in 
+larger functions and leads to the happy path being buried in a lot of if/for/... 
+statements.
 
 ## Testing
 
