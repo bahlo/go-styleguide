@@ -144,7 +144,7 @@ func (h *Handlers) DropHandler(w http.ResponseWriter, r *http.Request) {
 ```
 Use structs to encapsulate the variables and make them available only to those functions that actually need them by making them methods implemented for that struct.
 
-Alternatively higher-order functions can be used to inject dependencies via closures.
+Alternatively, higher-order functions can be used to inject dependencies via closures.
 ```go
 func main() {
 	db := // ...
@@ -316,11 +316,11 @@ func TestAdd(t *testing.T) {
 }
 ```
 
-Using table driven tests in combination with subtests gives you direct insight
+Using table-driven tests in combination with subtests gives you direct insight
 about which case is failing and which cases are tested.
 – [Mitchell Hashimoto at GopherCon 2017](https://youtu.be/8hQG7QlcLBk?t=7m34s)
 
-Running subtests in parallel allows you to have a lot more test cases and still get those awesomely fast go build times.
+Running subtests in parallel allow you to have a lot more test cases and still get those awesomely fast go build times.
 – [The Go Blog](https://blog.golang.org/subtests)
 
 ### Avoid mocks
@@ -561,7 +561,7 @@ Favour small interfaces and only expect the interfaces you need in your funcs.
 
 ## Don't under-package
 
-Deleting or merging packages is far more easier than splitting big ones up.
+Deleting or merging packages is far easier than splitting big ones up.
 When unsure if a package can be split, do it.
 
 ## Handle signals
@@ -733,7 +733,7 @@ func someOtherHelper() string {
 }
 ```
 
-Putting `main()` first makes reading the file a lot more easier. Only the
+Putting `main()` first makes reading the file a lot easier. Only the
 `init()` function should be above it.
 
 ## Use internal packages
@@ -819,7 +819,7 @@ func startServer(opts ...ServerOpt) {
 
 ## Structs
 ### Use named structs
-If a struct has more than one field include field names when instantiating it.
+If a struct has more than one field, include field names when instantiating it.
 
 **Don't:**
 ```go
