@@ -414,7 +414,7 @@ Since they are unexported, they are prone to change.
 
 ### Add examples to your test files to demonstrate usage
 ```go
-func ExamleSomeInterface_SomeMethod(){
+func ExampleSomeInterface_SomeMethod(){
 	instance := New()
 	result, err := instance.SomeMethod()
 	fmt.Println(result, err)
