@@ -332,7 +332,7 @@ A `tc := tc` is needed. Because without it, only one of the cases would be check
 **Don't:**
 ```go
 func TestRun(t *testing.T) {
-	mockConn := new(MockConn)
+	mockConn := &MockConn{}
 	run(mockConn)
 }
 ```
@@ -766,14 +766,14 @@ written in any way.
 
 **Don't:**
 ```go
-var w io.Writer = new(bytes.Buffer)
+var w io.Writer = &bytes.Buffer{}
 str := "some string"
 w.Write([]byte(str))
 ```
 
 **Do:**
 ```go
-var w io.Writer = new(bytes.Buffer)
+var w io.Writer = &bytes.Buffer{}
 str := "some string"
 io.WriteString(w, str)
 ```
@@ -810,7 +810,7 @@ func WithTimeout(timeout time.Duration) ServerOpt {
 }
 
 func startServer(opts ...ServerOpt) {
-	cfg := new(Config)
+	cfg := &Config{}
 	for _, fn := range opts {
 		fn(cfg)
 	}
