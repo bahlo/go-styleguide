@@ -15,7 +15,7 @@ experience and inspiration/ideas from conference talks.
 - [Avoid global variables](#avoid-global-variables)
 - [Keep the happy path left](#keep-the-happy-path-left)
 - [Testing](#testing)
-	- [Use an assert libary](#use-an-assert-libary)
+	- [Use an assert library](#use-an-assert-libary)
 	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
 	- [Use table-driven tests](#use-table-driven-tests)
 	- [Avoid mocks](#avoid-mocks)
@@ -228,7 +228,7 @@ statements.
 
 ## Testing
 
-### Use an assert libary
+### Use an assert library
 
 **Don't:**
 ```go
@@ -339,19 +339,20 @@ func TestRun(t *testing.T) {
 
 **Do:**
 ```go
+import "github.com/stretchr/testify/assert"
+
 func TestRun(t *testing.T) {
 	ln, err := net.Listen("tcp", "127.0.0.1:0")
-	t.AssertNil(t, err)
+	assert.Nil(t, err)
 
-	var server net.Conn
 	go func() {
 		defer ln.Close()
-		server, err := ln.Accept()
-		t.AssertNil(t, err)
+		_, err := ln.Accept()
+		assert.Nil(t, err)
 	}()
 
 	client, err := net.Dial("tcp", ln.Addr().String())
-	t.AssertNil(err)
+	assert.Nil(t, err)
 
 	run(client)
 }
@@ -470,7 +471,7 @@ func findMax(inputs []int) int {
 }
 ```
 Single-letter variable names are fine in the following cases.
-* They are absolut standard like ...
+* They are absolute standard like ...
 	* `t` in tests
 	* `r` and `w` in http request handlers
 	* `i` for the index in a loop
