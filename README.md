@@ -753,8 +753,9 @@ package.
 
 ## Embed binary data
 
-To enable single-binary deployments, use tools to add templates and other static
-assets to your binary
+To enable single-binary deployments, use the `//go:embed` directive and the [embed](https://pkg.go.dev/embed) package to add templates and other static
+assets to your binary.  
+For Go versions prior [v1.16](https://go.dev/doc/go1.16#library-embed), use external tools 
 (e.g. [github.com/gobuffalo/packr](https://github.com/gobuffalo/packr)).
 
 ## Use `io.WriteString`
