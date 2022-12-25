@@ -878,7 +878,7 @@ A number without a name and any context is just a random value. It tells us noth
 **Don't:**
 ```go
 func IsStrongPassword(password string) bool {
-	return len(password) > 8
+	return len(password) >= 8
 }
 ```
 
@@ -887,6 +887,6 @@ func IsStrongPassword(password string) bool {
 const minPasswordLength = 8
 
 func IsStrongPassword(password string) bool {
-	return len(password) > minPasswordLength
+	return len(password) >= minPasswordLength
 }
 ```
