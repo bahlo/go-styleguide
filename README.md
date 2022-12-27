@@ -44,6 +44,7 @@ experience and inspiration/ideas from conference talks.
 	- [Use named structs](#use-named-structs)
 	- [Avoid new keyword](#avoid-new-keyword)
 - [Consistent header naming](#consistent-header-naming)
+- [Avoid magic numbers](#avoid-magic-numbers)
 
 ## Add context to errors
 
@@ -869,4 +870,23 @@ w.Header.Set("content-Type")
 ```go
 r.Header.Get("Authorization")
 w.Header.Set("Content-Type")
+```
+
+## Avoid magic numbers
+A number without a name and any context is just a random value. It tells us nothing, so avoid them in your code (the exception might be the number 0, for example when creating loops). 
+
+**Don't:**
+```go
+func IsStrongPassword(password string) bool {
+	return len(password) >= 8
+}
+```
+
+**Do:**
+```go
+const minPasswordLength = 8
+
+func IsStrongPassword(password string) bool {
+	return len(password) >= minPasswordLength
+}
 ```
