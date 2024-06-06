@@ -5,46 +5,50 @@ This serves as a supplement to
 experience and inspiration/ideas from conference talks.
 
 ## Table of contents
-
-- [Add context to errors](#add-context-to-errors)
-- [Consistent error and log messages](#consistent-error-and-log-messages)
-- [Dependency management](#dependency-management)
-	- [Use modules](#use-modules)
-	- [Use Semantic Versioning](#use-semantic-versioning)
-- [Structured logging](#structured-logging)
-- [Avoid global variables](#avoid-global-variables)
-- [Keep the happy path left](#keep-the-happy-path-left)
-- [Testing](#testing)
-	- [Use an assert library](#use-an-assert-libary)
-	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
-	- [Use table-driven tests](#use-table-driven-tests)
-	- [Avoid mocks](#avoid-mocks)
-	- [Avoid DeepEqual](#avoid-deepequal)
-	- [Avoid testing unexported funcs](#avoid-testing-unexported-funcs)
-	- [Add examples to your test files to demonstrate usage](#add-examples-to-your-test-files-to-demonstrate-usage)
-- [Use linters](#use-linters)
-- [Use goimports](#use-goimports)
-- [Use meaningful variable names](#use-meaningful-variable-names)
-- [Avoid side effects](#avoid-side-effects)
-- [Favour pure functions](#favour-pure-functions)
-- [Don't over-interface](#dont-over-interface)
-- [Don't under-package](#dont-under-package)
-- [Handle signals](#handle-signals)
-- [Divide imports](#divide-imports)
-- [Avoid unadorned return](#avoid-unadorned-return)
-- [Use canonical import path](#use-canonical-import-path)
-- [Avoid empty interface](#avoid-empty-interface)
-- [Main first](#main-first)
-- [Use internal packages](#use-internal-packages)
-- [Avoid helper/util](#avoid-helperutil)
-- [Embed binary data](#embed-binary-data)
-- [Use io.WriteString](#use-iowritestring)
-- [Use functional options](#use-functional-options)
-- [Structs](#structs)
-	- [Use named structs](#use-named-structs)
-	- [Avoid new keyword](#avoid-new-keyword)
-- [Consistent header naming](#consistent-header-naming)
-- [Avoid magic numbers](#avoid-magic-numbers)
+- [Go Styleguide](#go-styleguide)
+	- [Table of contents](#table-of-contents)
+	- [Add context to errors](#add-context-to-errors)
+	- [Dependency management](#dependency-management)
+		- [Use modules](#use-modules)
+		- [Use Semantic Versioning](#use-semantic-versioning)
+	- [Structured logging](#structured-logging)
+	- [Avoid global variables](#avoid-global-variables)
+	- [Keep the happy path left](#keep-the-happy-path-left)
+	- [Testing](#testing)
+		- [Use an assert library](#use-an-assert-library)
+		- [Use sub-tests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
+		- [Use table driven tests](#use-table-driven-tests)
+		- [Avoid mocks](#avoid-mocks)
+		- [Avoid DeepEqual](#avoid-deepequal)
+		- [Avoid testing unexported funcs](#avoid-testing-unexported-funcs)
+		- [Add examples to your test files to demonstrate usage](#add-examples-to-your-test-files-to-demonstrate-usage)
+	- [Use linters](#use-linters)
+	- [Use goimports](#use-goimports)
+	- [Use meaningful variable names](#use-meaningful-variable-names)
+	- [Avoid side-effects](#avoid-side-effects)
+	- [Favour pure functions](#favour-pure-functions)
+	- [Don't over-interface](#dont-over-interface)
+	- [Don't under-package](#dont-under-package)
+	- [Handle signals](#handle-signals)
+	- [Divide imports](#divide-imports)
+	- [Avoid unadorned return](#avoid-unadorned-return)
+	- [Use canonical import path](#use-canonical-import-path)
+	- [Avoid empty interface](#avoid-empty-interface)
+	- [Main first](#main-first)
+	- [Use internal packages](#use-internal-packages)
+	- [Avoid helper/util](#avoid-helperutil)
+	- [Embed binary data](#embed-binary-data)
+	- [Use `io.WriteString`](#use-iowritestring)
+	- [Use functional options](#use-functional-options)
+	- [Structs](#structs)
+		- [Use named structs](#use-named-structs)
+		- [Avoid new keyword](#avoid-new-keyword)
+	- [Consistent header naming](#consistent-header-naming)
+	- [Avoid magic numbers](#avoid-magic-numbers)
+	- [Avoid panic in production](#avoid-panic-in-production)
+	- [Error handling and error types](#error-handling-and-error-types)
+	- [Package documentation](#package-documentation)
+	- [Avoid unnecessary abstraction](#avoid-unnecessary-abstraction)
 
 ## Add context to errors
 
@@ -890,3 +894,114 @@ func IsStrongPassword(password string) bool {
 	return len(password) >= minPasswordLength
 }
 ```
+
+## Avoid panic in production
+**Don't:**
+```go
+func divide(a, b int) int {
+	return a / b // Panic if b is 0
+}
+```
+Panicking in production can crash the program and should be avoided.
+
+
+**Do:**
+```go
+func divide(a, b int) (int, error) {
+	if b == 0 {
+		return 0, fmt.Errorf("division by zero")
+	}
+	return a / b, nil
+}
+```
+Return an error instead of panicking to handle exceptional cases. 
+
+## Error handling and error types
+**Don't:**
+```go
+func readFile(filename string) ([]byte, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+```
+
+**Do:**
+```go
+type FileError struct {
+	FileName string
+	Err      error
+}
+
+func (e *FileError) Error() string {
+	return fmt.Sprintf("error reading file %s: %v", e.FileName, e.Err)
+}
+
+func readFile(filename string) ([]byte, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, &FileError{FileName: filename, Err: err}
+	}
+	return data, nil
+}
+```
+Custom error types provide more context and better error handling.
+
+## Package documentation 
+**Don't:**
+```go
+package main
+
+func main() {
+	// No package or function documentation
+}
+```
+
+**Do:**
+```go
+// Package main provides the entry point for the application.
+package main
+
+// main is the entry point for the application.
+func main() {
+	// Start the application
+}
+```
+Documenting packages and functions enhances code understanding and usability.
+
+## Avoid unnecessary abstraction
+**Don't**
+```go
+type Runner interface {
+	Run()
+}
+
+type MyRunner struct{}
+
+func (r *MyRunner) Run() {
+	fmt.Println("Running")
+}
+
+func execute(runner Runner) {
+	runner.Run()
+}
+```
+Unnecessary abstractions complicate the code.
+
+
+**Do:**
+```go
+type MyRunner struct{}
+
+func (r *MyRunner) Run() {
+	fmt.Println("Running")
+}
+
+func main() {
+	r := &MyRunner{}
+	r.Run()
+}
+```
+Avoiding unnecessary abstraction simplifies code and improves readability.
