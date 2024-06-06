@@ -972,7 +972,7 @@ func main() {
 Documenting packages and functions enhances code understanding and usability.
 
 ## Avoid unnecessary abstraction
-**Don't**
+**Don't:**
 ```go
 type Runner interface {
 	Run()
