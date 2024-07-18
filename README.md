@@ -919,7 +919,7 @@ func readFile(filename string) ([]byte, error) {
 	return data, nil
 }
 ```
-Custom error types provide more context and better error handling.
+Using `fmt.Errorf` provides a simple and readable way to add context to errors.
 
 ## Package documentation 
 **Don't:**
