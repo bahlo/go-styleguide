@@ -45,10 +45,8 @@ experience and inspiration/ideas from conference talks.
 		- [Avoid new keyword](#avoid-new-keyword)
 	- [Consistent header naming](#consistent-header-naming)
 	- [Avoid magic numbers](#avoid-magic-numbers)
-	- [Avoid panic in production](#avoid-panic-in-production)
 	- [Error handling and error types](#error-handling-and-error-types)
 	- [Package documentation](#package-documentation)
-	- [Avoid unnecessary abstraction](#avoid-unnecessary-abstraction)
 
 ## Add context to errors
 
@@ -895,27 +893,6 @@ func IsStrongPassword(password string) bool {
 }
 ```
 
-## Avoid panic in production
-**Don't:**
-```go
-func divide(a, b int) int {
-	return a / b // Panic if b is 0
-}
-```
-Panicking in production can crash the program and should be avoided.
-
-
-**Do:**
-```go
-func divide(a, b int) (int, error) {
-	if b == 0 {
-		return 0, fmt.Errorf("division by zero")
-	}
-	return a / b, nil
-}
-```
-Return an error instead of panicking to handle exceptional cases. 
-
 ## Error handling and error types
 **Don't:**
 ```go
@@ -930,19 +907,10 @@ func readFile(filename string) ([]byte, error) {
 
 **Do:**
 ```go
-type FileError struct {
-	FileName string
-	Err      error
-}
-
-func (e *FileError) Error() string {
-	return fmt.Sprintf("error reading file %s: %v", e.FileName, e.Err)
-}
-
 func readFile(filename string) ([]byte, error) {
 	data, err := ioutil.ReadFile(filename)
 	if err != nil {
-		return nil, &FileError{FileName: filename, Err: err}
+		return nil, fmt.Errorf("error reading file %s: %v", filename, err)
 	}
 	return data, nil
 }
@@ -970,38 +938,3 @@ func main() {
 }
 ```
 Documenting packages and functions enhances code understanding and usability.
-
-## Avoid unnecessary abstraction
-**Don't:**
-```go
-type Runner interface {
-	Run()
-}
-
-type MyRunner struct{}
-
-func (r *MyRunner) Run() {
-	fmt.Println("Running")
-}
-
-func execute(runner Runner) {
-	runner.Run()
-}
-```
-Unnecessary abstractions complicate the code.
-
-
-**Do:**
-```go
-type MyRunner struct{}
-
-func (r *MyRunner) Run() {
-	fmt.Println("Running")
-}
-
-func main() {
-	r := &MyRunner{}
-	r.Run()
-}
-```
-Avoiding unnecessary abstraction simplifies code and improves readability.
