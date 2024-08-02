@@ -5,23 +5,22 @@ This serves as a supplement to
 experience and inspiration/ideas from conference talks.
 
 ## Table of contents
-
 - [Add context to errors](#add-context-to-errors)
 - [Consistent error and log messages](#consistent-error-and-log-messages)
 - [Dependency management](#dependency-management)
-	- [Use modules](#use-modules)
-	- [Use Semantic Versioning](#use-semantic-versioning)
+  - [Use modules](#use-modules)
+  - [Use Semantic Versioning](#use-semantic-versioning)
 - [Structured logging](#structured-logging)
 - [Avoid global variables](#avoid-global-variables)
 - [Keep the happy path left](#keep-the-happy-path-left)
 - [Testing](#testing)
-	- [Use an assert library](#use-an-assert-libary)
-	- [Use subtests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
-	- [Use table-driven tests](#use-table-driven-tests)
-	- [Avoid mocks](#avoid-mocks)
-	- [Avoid DeepEqual](#avoid-deepequal)
-	- [Avoid testing unexported funcs](#avoid-testing-unexported-funcs)
-	- [Add examples to your test files to demonstrate usage](#add-examples-to-your-test-files-to-demonstrate-usage)
+  - [Use an assert library](#use-an-assert-library)
+  - [Use sub-tests to structure functional tests](#use-sub-tests-to-structure-functional-tests)
+  - [Use table-driven tests](#use-table-driven-tests)
+  - [Avoid mocks](#avoid-mocks)
+  - [Avoid DeepEqual](#avoid-deepequal)
+  - [Avoid testing unexported funcs](#avoid-testing-unexported-funcs)
+  - [Add examples to your test files to demonstrate usage](#add-examples-to-your-test-files-to-demonstrate-usage)
 - [Use linters](#use-linters)
 - [Use goimports](#use-goimports)
 - [Use meaningful variable names](#use-meaningful-variable-names)
@@ -38,13 +37,20 @@ experience and inspiration/ideas from conference talks.
 - [Use internal packages](#use-internal-packages)
 - [Avoid helper/util](#avoid-helperutil)
 - [Embed binary data](#embed-binary-data)
-- [Use io.WriteString](#use-iowritestring)
+- [Use `io.WriteString`](#use-iowritestring)
 - [Use functional options](#use-functional-options)
 - [Structs](#structs)
-	- [Use named structs](#use-named-structs)
-	- [Avoid new keyword](#avoid-new-keyword)
+  - [Use named structs](#use-named-structs)
+  - [Avoid new keyword](#avoid-new-keyword)
 - [Consistent header naming](#consistent-header-naming)
 - [Avoid magic numbers](#avoid-magic-numbers)
+- [Use context for cancellation](#use-context-for-cancellation)
+- [Avoid panic in production](#avoid-panic-in-production)
+- [Error handling and error types](#error-handling-and-error-types)
+- [Code formatting](#code-formatting)
+- [Concurrency patterns](#concurrency-patterns)
+- [Package documentation](#package-documentation)
+- [Avoid unnecessary abstraction](#avoid-unnecessary-abstraction)
 
 ## Add context to errors
 
@@ -890,3 +896,49 @@ func IsStrongPassword(password string) bool {
 	return len(password) >= minPasswordLength
 }
 ```
+
+## Error handling and error types
+**Don't:**
+```go
+func readFile(filename string) ([]byte, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+```
+
+**Do:**
+```go
+func readFile(filename string) ([]byte, error) {
+	data, err := ioutil.ReadFile(filename)
+	if err != nil {
+		return nil, fmt.Errorf("error reading file %s: %v", filename, err)
+	}
+	return data, nil
+}
+```
+Using `fmt.Errorf` provides a simple and readable way to add context to errors.
+
+## Package documentation 
+**Don't:**
+```go
+package main
+
+func main() {
+	// No package or function documentation
+}
+```
+
+**Do:**
+```go
+// Package main provides the entry point for the application.
+package main
+
+// main is the entry point for the application.
+func main() {
+	// Start the application
+}
+```
+Documenting packages and functions enhances code understanding and usability.
